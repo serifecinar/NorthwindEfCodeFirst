@@ -21,24 +21,42 @@ namespace NorthwindEfCodeFirst
 
             //Nine();
 
+            //Ten();
+
             using (var northwindContext = new NorthwindContext())
             {
-                var result = from c in northwindContext.Customers
-                             group c by new {c.Country,c.City}
-                                         into g
-                             select new
-                             {
-                                 Sehir=g.Key.City,
-                                 Ulke=g.Key.Country,
-                                 Adet=g.Count()
-                             };
-                foreach (var group in result)
+                List<Customer> result = (from c in northwindContext.Customers
+                                         orderby c.Country.Length descending, c.ContactName ascending
+                                         select c).ToList();
+                foreach (var customer in result)
                 {
-                    Console.WriteLine("Ülke: {0}, Şehir:{1},Adet:{2}",group.Ulke,group.Sehir, group.Adet);
+                    Console.WriteLine("{0},{1}",customer.Country ,customer.ContactName);
                 }
+
+
             }
 
             Console.ReadLine();
+        }
+
+        private static void Ten()
+        {
+            using (var northwindContext = new NorthwindContext())
+            {
+                var result = from c in northwindContext.Customers
+                             group c by new { c.Country, c.City }
+                                         into g
+                             select new
+                             {
+                                 Sehir = g.Key.City,
+                                 Ulke = g.Key.Country,
+                                 Adet = g.Count()
+                             };
+                foreach (var group in result)
+                {
+                    Console.WriteLine("Ülke: {0}, Şehir:{1},Adet:{2}", group.Ulke, group.Sehir, group.Adet);
+                }
+            }
         }
 
         private static void Nine()
