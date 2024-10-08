@@ -12,19 +12,12 @@ namespace NorthwindEfCodeFirst
             //Three();
             //Four();
             //Five();
-
             //Six();
             //Seven();
-
             //Eight();
-
-
             //Nine();
-
             //Ten();
-
             //Eleven();
-
             //Twelve();
 
             using (var northwindContext = new NorthwindContext())
