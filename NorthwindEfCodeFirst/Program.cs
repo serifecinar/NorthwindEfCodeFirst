@@ -7,7 +7,7 @@ namespace NorthwindEfCodeFirst
     {
         static void Main(string[] args)
         {
-           // One();
+            // One();
             //Two();
             //Three();
             //Four();
@@ -16,19 +16,60 @@ namespace NorthwindEfCodeFirst
             //Six();
             //Seven();
 
+            //Eight();
+
+
+            //Nine();
+
+            using (var northwindContext = new NorthwindContext())
+            {
+                var result = from c in northwindContext.Customers
+                             group c by new {c.Country,c.City}
+                                         into g
+                             select new
+                             {
+                                 Sehir=g.Key.City,
+                                 Ulke=g.Key.Country,
+                                 Adet=g.Count()
+                             };
+                foreach (var group in result)
+                {
+                    Console.WriteLine("Ülke: {0}, Şehir:{1},Adet:{2}",group.Ulke,group.Sehir, group.Adet);
+                }
+            }
+
+            Console.ReadLine();
+        }
+
+        private static void Nine()
+        {
+            using (var northwindContext = new NorthwindContext())
+            {
+                var result = from c in northwindContext.Customers
+                             group c by c.Country
+                                         into g
+                             select g;
+                foreach (var group in result)
+                {
+                    Console.WriteLine(group.Key);
+                }
+            }
+        }
+
+        private static void Eight()
+        {
             using (var northwindContext = new NorthwindContext())
             {
                 List<Customer> result = (from c in northwindContext.Customers
-                                         where c.City=="Berlin"  || c.Country == "UK"
+                                         where c.City == "Berlin" || c.Country == "UK"
                                          select c).ToList();
                 foreach (var customer in result)
                 {
-                    Console.WriteLine("Contact Name: {0}, City: {1}",customer.ContactName,customer.City);
+                    Console.WriteLine("Contact Name: {0}, City: {1}", customer.ContactName, customer.City);
                 }
 
 
             }
-            Console.ReadLine();
         }
 
         private static void Seven()
