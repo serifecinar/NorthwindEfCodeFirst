@@ -7,17 +7,67 @@ namespace NorthwindEfCodeFirst
     {
         static void Main(string[] args)
         {
-            //One();
+           // One();
             //Two();
             //Three();
             //Four();
+            //Five();
+
+            //Six();
+            //Seven();
+
+            using (var northwindContext = new NorthwindContext())
+            {
+                List<Customer> result = (from c in northwindContext.Customers
+                                         where c.City=="Berlin"  || c.Country == "UK"
+                                         select c).ToList();
+                foreach (var customer in result)
+                {
+                    Console.WriteLine("Contact Name: {0}, City: {1}",customer.ContactName,customer.City);
+                }
+
+
+            }
+            Console.ReadLine();
+        }
+
+        private static void Seven()
+        {
+            using (var northwindContext = new NorthwindContext())
+            {
+                var result = from c in northwindContext.Customers
+                             select new Musteri { Ulke = c.Country, Sirket = c.CompanyName, Adi = c.ContactName };
+
+                foreach (var musteri in result)
+                {
+                    Console.WriteLine(musteri.Sirket);
+                }
+            }
+        }
+
+        private static void Six()
+        {
+            using (var northwindContext = new NorthwindContext())
+            {
+                List<Customer> result = (from c in northwindContext.Customers
+                                         select c).ToList();
+                foreach (var customer in result)
+                {
+                    Console.WriteLine(customer.ContactName);
+                }
+
+
+            }
+        }
+
+        private static void Five()
+        {
             using (var northwindContext = new NorthwindContext())
             {
                 Customer customer = northwindContext.Customers.Find("ENGİN");
                 customer.Country = "Turkey";
                 northwindContext.SaveChanges();
             }
-                Console.ReadLine();
         }
 
         private static void Four()
@@ -76,5 +126,12 @@ namespace NorthwindEfCodeFirst
         }
         
 
+    }
+
+    internal class Musteri
+    {
+        public string Ulke { get; internal set; }
+        public string Sirket { get; internal set; }
+        public string Adi { get; internal set; }
     }
 }
