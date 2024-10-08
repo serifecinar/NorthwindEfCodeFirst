@@ -23,6 +23,63 @@ namespace NorthwindEfCodeFirst
 
             //Ten();
 
+            //Eleven();
+
+            //Twelve();
+
+            using (var northwindContext = new NorthwindContext())
+            {
+                var result = from c in northwindContext.Customers
+                             join o in northwindContext.Orders
+                             on c.CustomerID equals o.CustomerID into temp
+                             from co in temp.DefaultIfEmpty()
+                             //where temp.Count() == 0
+                             select new
+                             {
+                                 c.CustomerID,
+                                 c.ContactName,
+                                 c.CompanyName
+                             };
+                foreach (var customer in result)
+                {
+                    Console.WriteLine("{0},{1},{2}", customer.CustomerID, customer.ContactName, customer.CompanyName);
+                }
+                Console.WriteLine("{0} adet kayıt vardır", result.Count());
+
+            }
+
+
+                Console.ReadLine();
+        }
+
+        private static void Twelve()
+        {
+            using (var northwindContext = new NorthwindContext())
+            {
+                var result = from c in northwindContext.Customers
+                             join o in northwindContext.Orders
+                             on
+                             new { CustomerID = c.CustomerID, Sehir = c.City }
+                             equals
+                             new { CustomerID = o.CustomerID, Sehir = o.ShipCity }
+                             orderby c.CustomerID
+                             select new
+                             {
+                                 c.CustomerID,
+                                 c.ContactName,
+                                 o.OrderDate,
+                                 o.ShipCity
+                             };
+
+                foreach (var item in result)
+                {
+                    Console.WriteLine("{0},{1},{2},{3}", item.CustomerID, item.ContactName, item.OrderDate, item.ShipCity);
+                }
+            }
+        }
+
+        private static void Eleven()
+        {
             using (var northwindContext = new NorthwindContext())
             {
                 List<Customer> result = (from c in northwindContext.Customers
@@ -30,13 +87,11 @@ namespace NorthwindEfCodeFirst
                                          select c).ToList();
                 foreach (var customer in result)
                 {
-                    Console.WriteLine("{0},{1}",customer.Country ,customer.ContactName);
+                    Console.WriteLine("{0},{1}", customer.Country, customer.ContactName);
                 }
 
 
             }
-
-            Console.ReadLine();
         }
 
         private static void Ten()
