@@ -1,5 +1,6 @@
 ﻿using NorthwindEfCodeFirst.Context;
 using NorthwindEfCodeFirst.Entities;
+using System.Data.Entity;
 
 namespace NorthwindEfCodeFirst
 {
@@ -19,14 +20,50 @@ namespace NorthwindEfCodeFirst
             //Ten();
             //Eleven();
             //Twelve();
+            //Thirteen();
+            //Fourteen();
+            using (var northwindContext = new NorthwindContext())
+            {
+                //eager loading
+                var result = northwindContext.Customers.Where(c=>c.CustomerID=="ALFKI").Include("Orders");
 
+                foreach (var customer in result)
+                {
+                    Console.WriteLine("{0},{1}",customer.ContactName,customer.Orders.Count);
+                }
+
+            }
+
+
+                Console.ReadLine();
+        }
+
+        private static void Fourteen()
+        {
+            using (var northwindContext = new NorthwindContext())
+            {
+                var result = northwindContext.Customers.
+                    Where(c => c.City == "London" || c.Country == "UK").
+                    OrderBy(c => c.ContactName).
+                    Select(cus => new { cus.CustomerID, cus.ContactName });
+
+                foreach (var customer in result)
+                {
+                    Console.WriteLine("{0},{1}", customer.CustomerID, customer.ContactName);
+                }
+
+            }
+        }
+
+        private static void Thirteen()
+        {
             using (var northwindContext = new NorthwindContext())
             {
                 var result = from c in northwindContext.Customers
                              join o in northwindContext.Orders
                              on c.CustomerID equals o.CustomerID into temp
                              from co in temp.DefaultIfEmpty()
-                             //where temp.Count() == 0
+                                 //where temp.Count() == 0
                              select new
                              {
                                  c.CustomerID,
@@ -40,9 +77,6 @@ namespace NorthwindEfCodeFirst
                 Console.WriteLine("{0} adet kayıt vardır", result.Count());
 
             }
-
-
-                Console.ReadLine();
         }
 
         private static void Twelve()
